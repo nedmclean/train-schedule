@@ -20,7 +20,7 @@
   var trainName = $("#train-name-input").val().trim();
   var destination = $("#destination-input").val().trim();
   var frequency = $("#frequency-input").val().trim();
-  var firstTrainTime = moment($("#train-time-input").val().trim(), "hh:mm").format("X");
+  var firstTrainTime = moment($("#train-time-input").val().trim(), "HH:mm").format("X");
  
   var newTrain = {
     name: trainName,
@@ -41,15 +41,15 @@
   database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 
 
-  console.log(childSnapshot.val());
-
   var trainName  = childSnapshot.val().name;
   var destination = childSnapshot.val().going;
   var frequency = childSnapshot.val().frequency;
   var firstTrainTime = childSnapshot.val().firstTrain;
 
   var niceTimehhmm = moment.unix(firstTrainTime).format("HH:mm");
-  var niceTimemm = moment.unix(firstTrainTime).format("m");
+  
+
+  // var niceTimemm = moment.unix(firstTrainTime).format("m");
 
   
   var tFrequency = frequency;
@@ -73,9 +73,10 @@
     var tMinutesTillTrain = parseInt(tFrequency - tRemainder);
     console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 
-    var nextTrain = parseInt(moment(currentTime).add(tMinutesTillTrain, "m"));
+    var nextTrain = parseInt(moment(currentTime).add(tMinutesTillTrain));
     console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
  
-$("#train-schedule > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + niceTimehhmm + nextTrain + "</td><td>" + niceTimemm + tMinutesTillTrain + " minutes away" + "</td></tr>");
+$("#train-schedule > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + niceTimehhmm + nextTrain + "</td><td>" + tMinutesTillTrain + " minutes away" + "</td></tr>");
+
 });
 
